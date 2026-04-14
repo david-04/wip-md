@@ -7,11 +7,12 @@ user-invocable: true
 
 # General instructions
 
-Your task is to create or update a specification document called `WIP.md`. You will be provided with some background information followed by steps on how to create or update the file. Do not create or update `WIP.md` in a way that you _think_ is right. Always follow the instructions very closely. Do not make any code changes either. Your only task is to create or update `WIP.md`.
+Your task is to create or update a specification document called `WIP.md`. You will be provided with some background information followed by steps on how to create or update the file. Your only task is to create or update `WIP.md`.
 
-Whenever you receive user input, always reload file `WIP.md`. It might have been modified in the background.
-
-Important: Whenever the user provides actionable input, you MUST immediately incorporate this input into the `Requirements` and `Tasks` sections of `WIP.md` by following the steps below. You must incorporate input even if the `Tasks` and `Requirements` sections are already populated. Never defer or ignore actionable input. Do not wait for further clarification, confirmation, or additional input from the user.
+- Do not create or update `WIP.md` in a way that you _think_ is right. You MUST always follow this skill's instructions very closely.
+- Do NOT make any code changes, even if the user's message appears to request implementation. Your only task is to create or update `WIP.md`. Do not create or modify any other file(s).
+- Important: Whenever the user provides actionable input, you MUST immediately incorporate this input into the `Requirements` and `Tasks` sections of `WIP.md` by following the steps below. You must incorporate input even if the `Tasks` and `Requirements` sections are already populated. Never defer or ignore actionable input. Do not wait for further clarification, confirmation, or additional input from the user.
+- Whenever you need to retrieve information about the current code/implementation, always invoke a subagent to perform the analysis and provide you with the summary. For example, use a subagent to explore/understand the current implementation, when you need to extend existing functionality or plan to integrate new functionality into pre-existing code.
 
 # Structure of the `WIP.md`
 
@@ -86,7 +87,15 @@ Whenever you receive user input, follow these steps to create or update the spec
 
     - The absence of `WIP.md` is a clear signal that you are starting a new specification. In this case you MUST ask clarifying questions before populating the file.
 
-2. Ask clarifying questions
+2. Inspect pre-existing code
+
+    - Sometimes, the requested feature builds on code that has already been implemented. If so, run a subagent to inspect the pre-existing code and identify which parts are relevant for the new feature.
+    - If the user has described a completely new feature that does not interact with pre-existing code, you can skip this step.
+    - If you've decided that you need to analyse pre-existing code, always do this before asking the user any questions.
+    - If the subagent returned information that raises more questions, run the subagent again until you understand enough about the current code base to refine the requirements.
+
+3. Ask clarifying questions
+
     - You must only ask clarifying questions if any of the following is true:
       a. `WIP.md` does not exist (or you have just created it in step 1)
       b. the `Requirements` section in `WIP.md` is empty (contains no bullet points)
@@ -108,18 +117,18 @@ Whenever you receive user input, follow these steps to create or update the spec
         - Do not wait for an additional explicit "save" or confirmation from the user - answers to your questions are actionable input and must be written into `WIP.md` automatically.
     - When incorporating answers, always try to treat them as regular requirements and put them into the appropriate group within the `Requirements` section. In rare cases, where an answer does not constitute a requirement, add it to a special top-level requirement group called `Clarifications` (if not already present). Summarize the answer as a statement (not in Q&A format).
 
-3. Populate or update the `Overview` section in `WIP.md`
+4. Populate or update the `Overview` section in `WIP.md`
     - If the `Overview` section already contains a summary of the feature, compare the summary with the user input and the current requirements in the `Requirements` section. If `Overview` section is not empty, and if it is still a good description of the feature, skip this step.
     - Populate or update the `Overview` section with a high-level summary of the capabilities added by the feature.
     - The summary must be a single paragraph with only a few sentences. Use short sentences that are easy to read. Omit low-level details like field or identifier names.
     - Ensure that the header (`## Overview`) is preserved. Never remove it and never add a duplicate header.
     - Save file `WIP.md`.
 
-4. Populate or update the `Requirements` section in `WIP.md`
+5. Populate or update the `Requirements` section in `WIP.md`
     - Identify all requirements
         - Consider all input that the user has provided, including the very first message when the skill is invoked, and any subsequent messages or answers to clarifying questions. Also consider all requirements that are currently described in the `Requirements` section of `WIP.md`.
         - Requirements can be functional requirements (features and expected behaviors) or technical instructions (e.g. how to implement something, or how to name files and functions). Treat all of them as requirements that are relevant for the `Requirements` section.
-        - User input might include sample data (like a JSON snippet) or instructions on how to structure/implement the code. Treat all of this input as requirements and make sure to preserve it in the `Requirements` section.
+        - User input might include sample data (like a JSON snippet) or instructions on how to structure/implement the code. Treat all of this input as requirements and make sure to preserve it in the `Requirements` section. If the user provides snippets (like a bit of code, pseudo-code or JSON), you MUST preserve this information and store it in the `Requirements` section.
         - Only consider requirements that are directly derived from user input (including answers to questions) or already documented in the `Requirements` section. Do not treat general instructions from files like `AGENTS.md` as requirements.
     - Populate the `Requirements` section
         - If the `Requirements` section is empty, create it from scratch. If it already contains requirements, update them as required.
@@ -134,7 +143,7 @@ Whenever you receive user input, follow these steps to create or update the spec
         - Ensure that the header (`## Requirements`) is preserved. Never remove it and never add a duplicate header.
     - Save file `WIP.md`.
 
-5. Populate or update the `Tasks` section in `WIP.md`
+6. Populate or update the `Tasks` section in `WIP.md`
     - Unless instructed otherwise by the user, do not consider testing when creating or updating the `Tasks` section. If applicable, test will be implemented automatically, even when not mentioned.
     - If the user explicitly asked for tests to be added, include them in the same task that also covers the implementation. Never split implementation and test into two separate tasks.
     - Come up with a draft implementation plan
@@ -149,12 +158,14 @@ Whenever you receive user input, follow these steps to create or update the spec
     - Incorporate the implementation plan into the `Tasks` section
         - Always update the `Tasks` section in-place. Never prepend, append, or create a duplicate `Tasks` section. The file must contain exactly one `## Tasks` header and one list of tasks. Before saving, check for and remove any duplicate or extra `## Tasks` headers and their content, ensuring only one `Tasks` section exists in the file. Never put the `Tasks` section into the `Requirements` section. The `Tasks` section must always be the last section in `WIP.md`.
         - Ensure to incorporate all details that the subagent has provided.
-        - Make sure that each implementation task has a good size, so that it can later be implemented by a subagent in one go. As a rule of thumb, there should usually be between 3 and 6 tasks. But you can create fewer or more tasks if the feature is very small or very large.
+        - As a rule of thumb, there should be between 3 and 5 tasks. But you can create fewer or more tasks if necessary.
+        - Each task must be a self-contained code change. After its implementation, the application must be in a working state. That is, it must compile and (if applicable) the tests must pass. If more than one task needs to be completed before the application is in working state again, combine the relevant tasks into one.
         - Format each task as a bullet point list item (`- <EMOJI> Task <NUMBER>: Task description`). You can add a nested bullet point list (`- Detail description`) under each task, to describe more code changes more granularly and with more details.
         - For pre-existing tasks, preserve the `<EMOJI>` that's already there. When adding new tasks, use ⏸️ as the emoji (`- ⏸️ Task <NUMBER>: Task description`).
-        - Do not repeat detailed expected behavior that's already described in the `Requirements` section. Only summarise which functionality is added. For example, simply state: "Implement validation", rather than repeating individual validation rules that are already described in the `Requirements` section.
+        - Do not repeat detailed expected behavior that's already described in the `Requirements` section. Only summarise which functionality is added. For example, simply state: "Implement validation", rather than repeating individual validation rules that are already described in the `Requirements` section. Do not repeat identifiers either. For example, if the `Requirements` section already contains a list of property names or other enumerated values, do not repeat them in the `Tasks` section.
         - Ensure that each task states the precise relative path of all files that it creates/updates. Surround the paths with backticks, so that Markdown renders them as code.
         - Ensure that each task states the precise name of every function that it creates/changes. Surround the names with backticks, so that Markdown renders them as code.
+        - When stating function names, only mention the name itself. Do not include the full signature. For example, instead of `myFunction(param: DataType) : ReturnType` only describe the function as `myFunction`.
         - Ensure that each task states the precise name of every class, interface or type that it creates/changes. Surround each name with backticks, so that Markdown renders them as code. Only include the name and type. Do not include the names or data types of individual attributes.
         - Ensure that all tasks are ordered so that they can be implemented one after the other. Make sure that no task depends on functionality that is only added by a task further down the list. Re-order tasks if necessary.
     - Whenever you have updated the `Tasks` section, you MUST verify that the formatting is correct:
@@ -162,8 +173,8 @@ Whenever you receive user input, follow these steps to create or update the spec
         - Renumber all top-level tasks so that the task numbers are unique, sequential, and consecutive, starting from 1 (e.g., `- ⏸️ Task 1: ...`, `- ⏸️ Task 2: ...`). Never leave behind duplicate or out-of-order task numbers.
         - Make sure that nested bullet point lists do not contain emojis or task numbers (`- Description`).
     - Save file `WIP.md`.
-    
-6. Advice the user on the next steps
+
+7. Advice the user on the next steps
     - Display the following text to the user:
 
         ```
@@ -179,9 +190,9 @@ Whenever you receive user input, follow these steps to create or update the spec
     - Don't ask the user if you should start to implement the feature either. Your only task is to create or update file `WIP.md`.
     - Do not add the above message (or anything else) to `WIP.md`.
 
-7. If you have receive any kind of user input (either directly or as answers to questions), and you have not incorporated it into `WIP.md`, explain why you did not add the new information to the document.
+8. If you have receive any kind of user input (either directly or as answers to questions), and you have not incorporated it into `WIP.md`, explain why you did not add the new information to the document.
 
-8. Whenever the user continues the chat
+9. Whenever the user continues the chat
     - Always read file `WIP.md` again. Do not re-use the content that's already in the context. The user might have modified the file in the background.
     - Whenever you receive input from the user (directly or as answers to questions that you ask), make sure to always incorporate this input into the `Requirements` and `Tasks` sections of `WIP.md`, by following the steps described above.
     - If the input is an answer to clarifying questions you previously asked, treat it as high-priority actionable input: immediately update `WIP.md` (Requirements and Tasks), run the subagent to refresh the implementation plan, save the file, and only then respond to the user. Do not ask for an extra confirmation before saving these answers into `WIP.md`.

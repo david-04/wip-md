@@ -90,7 +90,7 @@ Your task is to run subagents to implement individual tasks, or to complete fina
     - After displaying the message, immediately continue to the next step to go through and implement all tasks. Do not wait for user input or confirmation.
 
 4. Go through all tasks that you've determined in the previous step. For each task, follow these steps:
-    - Update `WIP.md` and set the task's emoji in the `Tasks` section to ⌛ (format: `- ⌛ Task <NUMBER>: Description`). Only update this one line and only change the emoji. Do not make any other changes (neither to this line, nor to any other line in the file). Then save file `WIP.md` immediately.
+    - Update `WIP.md` and set the task's emoji in the `Tasks` section to ⌛ (format: `- ⌛ Task <NUMBER>: Description`). Only update this one line in-place and only change the emoji. Do not make any other changes (neither to this line, nor to any other line in the file). Do not make any changes to the `Requirements` or `Overview` sections. After setting the task's emoji, save file `WIP.md` immediately.
 
     - Run a subagent to implement the current task. Do not specify an agent name. Do not use an agent that's specialised in planning or exploration. The agent must be capable of immediately implementing the required code changes. Provide the subagent with the following instructions (exactly as they are given here, do not modify them):
 
